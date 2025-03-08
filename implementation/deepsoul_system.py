@@ -7,6 +7,7 @@ import json
 import torch
 import logging
 import threading
+import traceback
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Any
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -341,4 +342,11 @@ class DeepSoul:
         elif enhancement_type == "refactor":
             prompt = f"Refactor this {language} code to improve readability and maintainability:\n\n```{language}\n{code}\n```\n\nRefactored code:"
         else:
-            prompt = f"Improve this {language} code:\n\n```{language}\n{code}\n
+            prompt = f"Improve this {language} code:\n\n```{language}\n{code}\n```\n\nImproved code:"
+        
+        # Generate enhanced code
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        outputs = self.model.generate(**inputs, max_new_tokens=512)
+        enhanced_code = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        
+        return enhanced_code
