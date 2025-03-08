@@ -330,6 +330,113 @@ The reproducible code for the following evaluation results can be found in the [
 #### 4) Program-Aid Math Reasoning Benchmark
 ![Math](pictures/Math.png)
 
+### Installation and Setup
+
+To set up the environment for DeepSeek-Coder, we provide a convenient setup script that installs all necessary dependencies and checks for required datasets.
+
+#### Quick Start
+
+**For Windows:**
+```bat
+setup.bat
+```
+
+**For Linux/macOS:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+The setup script will:
+1. Check your system environment and CUDA availability
+2. Install all required dependencies
+3. Check for evaluation datasets
+4. Provide usage instructions
+
+#### Advanced Options
+
+You can customize the setup process with the following options:
+
+```bash
+# Skip dependency installation
+setup.py --skip-deps      
+
+# Only install specific dependencies
+setup.py --eval-only      # Only evaluation dependencies
+setup.py --finetune-only  # Only fine-tuning dependencies
+setup.py --demo-only      # Only demo dependencies
+
+# Virtual environment management
+setup.py --create-venv    # Create a virtual environment
+setup.py --venv-name NAME # Specify virtual environment name
+
+# Testing and caching
+setup.py --test-model     # Download and test a small model
+setup.py --setup-model-cache # Set up the model cache directory
+```
+
+#### System Requirements
+
+- **Python**: 3.8 - 3.11
+- **RAM**: Minimum 16GB, 32GB+ recommended for larger models
+- **GPU**: NVIDIA GPU with 12GB+ VRAM for base models, 24GB+ for 33B model
+- **Disk Space**: 20GB+ for code and datasets, 100GB+ recommended including model cache
+
+#### Manual Installation
+
+If you prefer to install dependencies manually, refer to the requirements.txt files in the repository:
+```bash
+# Base dependencies
+pip install -r requirements.txt
+
+# Fine-tuning dependencies
+pip install -r finetune/requirements.txt
+
+# Demo dependencies
+pip install -r demo/requirements.txt
+
+# For specific evaluation tasks
+pip install -r Evaluation/HumanEval/requirements.txt
+pip install -r Evaluation/MBPP/requirements.txt
+pip install -r Evaluation/PAL-Math/requirements.txt
+pip install -r Evaluation/DS-1000/requirements.txt
+```
+
+#### Special Dependencies
+
+For DeepSpeed installation (for fine-tuning):
+```bash
+pip install deepspeed --no-deps
+pip install triton ninja packaging
+```
+
+#### Quick Setup
+
+For a comprehensive installation of all dependencies at once:
+
+```bat
+install_requirements.bat
+```
+
+This will install all required dependencies for the core functionality, evaluations, demos, and fine-tuning (except DeepSpeed which requires special installation).
+
+Alternative quick installation using the consolidated requirements file:
+
+```bash
+pip install -r une/requirements.txt
+```
+
+#### Troubleshooting
+
+If you encounter issues during setup:
+
+1. **CUDA errors**: Ensure you have compatible NVIDIA drivers for CUDA 11.8
+2. **Memory errors**: Try using smaller models or reduce batch sizes
+3. **Import errors**: Check that all dependencies are installed correctly
+4. **Permission errors**: On Linux/macOS, use `sudo` if necessary for system-wide installations
+
+For further assistance, please open an issue on our GitHub repository.
+
 ### Inference with vLLM
 
 You can also employ [vLLM](https://github.com/vllm-project/vllm) for high-throughput inference.

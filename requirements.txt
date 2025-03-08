@@ -1,8 +1,13 @@
-torch>=2.0
-tokenizers>=0.14.0
-transformers==4.35.0
-accelerate
-sympy==1.12
-pebble 
-timeout-decorator 
-attrdict
+# Core dependencies for DeepSeek-Coder
+transformers>=4.30.0
+torch>=2.0.0
+accelerate>=0.20.0
+attrdict>=2.0.1
+numpy>=1.22.0
+tqdm>=4.64.0
+huggingface-hub>=0.16.0
+pyyaml>=6.0
+filelock>=3.9.0
+regex>=2022.1.18
+packaging>=20.0
+requests>=2.28.0
