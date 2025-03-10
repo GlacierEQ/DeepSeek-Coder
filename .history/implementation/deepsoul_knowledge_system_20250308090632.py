@@ -273,30 +273,30 @@ class KnowledgeStore:
             except (FileNotFoundError, KeyError):
                 embedding = None
             
-            # Convert to object
-            sources = []
-            for s in source_rows:
-                sources.append(KnowledgeSource(
-                    source_type=s["source_type"],
-                    uri=s["uri"],
-                    confidence=s["confidence"],
-                    tags=json.loads(s["tags"]),
-                    metadata=json.loads(s["metadata"])
-                ))
-                sources[-1].timestamp = datetime.fromisoformat(s["timestamp"])
-            
-            item = CodeKnowledgeItem(
-                content=item_row["content"],
-                language=item_row["language"],
-                sources=sources,
-                embedding=embedding,
-                item_type=item_row["item_type"],
-                complexity=item_row["complexity"],
-                relevance_score=item_row["relevance_score"],
-                relationship_ids=[r["to_id"] for r in rel_rows],
-                metadata=json.loads(item_row["metadata"])
-            )
-            item.timestamp = datetime.fromisoformat(item_row["timestamp"])
+    # Convert to object
+    sources = []
+    for s in source_rows:
+        sources.append(KnowledgeSource(
+            source_type=s["source_type"],
+            uri=s["uri"],
+            confidence=s["confidence"],
+            tags=json.loads(s["tags"]),
+            metadata=json.loads(s["metadata"])
+        ))
+        sources[-1].timestamp = datetime.fromisoformat(s["timestamp"])
+    
+    item = CodeKnowledgeItem(
+        content=item_row["content"],
+        language=item_row["language"],
+        sources=sources,
+        embedding=embedding,
+        item_type=item_row["item_type"],
+        complexity=item_row["complexity"],
+        relevance_score=item_row["relevance_score"],
+        relationship_ids=[r["to_id"] for r in rel_rows],
+        metadata=json.loads(item_row["metadata"])
+    )
+    item.timestamp = datetime.fromisoformat(item_row["timestamp"])
             
             return item
             
@@ -531,7 +531,7 @@ class KnowledgeAcquisition:
             for chunk in chunks:
                 if len(chunk.strip()) < 10:  # Skip very small chunks
                     continue
-                
+                    
                 # Assess quality
                 quality = self._assess_code_quality(chunk, language)
                 
@@ -602,14 +602,14 @@ class KnowledgeAcquisition:
                     # Skip hidden files and non-code files
                     if file.startswith('.'):
                         continue
-                    
+                        
                     file_path = os.path.join(root, file)
                     
                     # Skip binary files and large files
                     try:
                         if os.path.getsize(file_path) > 1000000:  # 1MB
                             continue
-                        
+                            
                         # Check if file is text
                         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                             f.read(1024)  # Just read a bit to check if it's text
@@ -824,53 +824,3 @@ def demo():
     
 if __name__ == "__main__":
     demo()
-    demo()    def _generate_embedding(self, text: str) -> np.ndarray:
-        """Generate embedding for text using the model"""
-        if self.model is None or self.tokenizer is None:
-            raise ValueError("Model and tokenizer are required for embedding generation")
-        
-        # Tokenize and get model embedding
-        inputs = self.tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
-        inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
-        
-        with torch.no_grad():
-            outputs = self.model(**inputs, output_hidden_states=True)
-            # Use last hidden state of [CLS] token as embedding
-            embedding = outputs.hidden_states[-1][0, 0].cpu().numpy()
-        
-        # Normalize
-        embedding = embedding / np.linalg.norm(embedding)
-        
-        return embedding
-    ====== 
-    demo()
-    pass
-        def ingest_file(self, file_path: str) -> List[str]:
-        """
-        Ingest knowledge from a file
-        
-        Args:
-            file_path: Path to the file
-            
-        Returns:
-            List of added knowledge item IDs
-        """
-        try:
-            item_ids = []
-            language = detect_language(file_path)
-            if not language:
-                return []
-            
-            # Create knowledge source
-            source = KnowledgeSource(
-                source_type='file',
-                uri=file_path,
-                confidence=0.9,
-                tags=[language, 'code'],
-                metadata={}
-            )
-            
-            # Split code into chunks
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                code = f.read()
-            chunks = split_

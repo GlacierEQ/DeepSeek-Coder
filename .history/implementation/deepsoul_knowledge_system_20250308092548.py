@@ -845,32 +845,3 @@ if __name__ == "__main__":
     ====== 
     demo()
     pass
-        def ingest_file(self, file_path: str) -> List[str]:
-        """
-        Ingest knowledge from a file
-        
-        Args:
-            file_path: Path to the file
-            
-        Returns:
-            List of added knowledge item IDs
-        """
-        try:
-            item_ids = []
-            language = detect_language(file_path)
-            if not language:
-                return []
-            
-            # Create knowledge source
-            source = KnowledgeSource(
-                source_type='file',
-                uri=file_path,
-                confidence=0.9,
-                tags=[language, 'code'],
-                metadata={}
-            )
-            
-            # Split code into chunks
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                code = f.read()
-            chunks = split_
